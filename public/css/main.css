@@ -1,0 +1,45 @@
+body {
+  font-family: "Times New Roman", Times, serif;
+  margin: 0;
+  padding: 0;
+}
+
+.main-header {
+  height: 4rem;
+  width: 100%;
+  background-color: rgb(167, 216, 247);
+  border-bottom: gray solid 1px;
+}
+
+.navbar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-list-item {
+  padding: 12px;
+  list-style-type: none;
+}
+
+.nav-list-item a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-list-item a:hover,
+.nav-list-item a:active {
+  color: black;
+}
+
+.page-not-found {
+  margin: 0 auto;
+  width: 150px;
+  padding-top: 24px;
+}

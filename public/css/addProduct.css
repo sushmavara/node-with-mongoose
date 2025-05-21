@@ -1,0 +1,39 @@
+.main-content {
+  width: 100%;
+}
+
+.form-wrapper {
+  margin: 0 auto; /* centers horizontally */
+  width: 300px;
+  margin-top: 4rem;
+  border: 1px solid beige;
+  background-color: rgb(201, 242, 242);
+  padding: 16px;
+}
+
+.field-wrapper {
+  width: 100%;
+}
+
+.field-name {
+  padding-bottom: 8px;
+  font-size: 20px;
+}
+
+.field-input {
+  height: 24px;
+  width: 98%;
+}
+
+.form-submit {
+  margin-top: 16px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(190, 190, 246);
+}
+
+.form-submit:hover {
+  cursor: pointer;
+  background-color: rgb(164, 164, 243);
+}
