@@ -1,0 +1,32 @@
+.form-wrapper {
+  margin: 0 auto;
+  width: 300px;
+  background-color: white;
+  padding: 8px;
+}
+
+.field-wrapper {
+  padding: 12px;
+}
+
+.field-name {
+  color: rgb(95, 12, 126);
+  padding-bottom: 4px;
+}
+
+.input-value {
+  width: 97%;
+  height: 24px;
+}
+
+.input-textarea {
+  width: 97%;
+}
+
+.footer {
+  padding-top: 8px;
+  padding-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

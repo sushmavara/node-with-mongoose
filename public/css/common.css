@@ -1,0 +1,108 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.display-flex {
+  display: flex;
+  align-items: center;
+}
+
+.display-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-inline-flex {
+  display: inline-flex;
+  gap: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.hr-line {
+  border: none;
+  height: 1px;
+  background-color: rgb(220, 220, 220);
+}
+
+.table-hr-line {
+  border: none;
+  height: 1px;
+  background-color: rgb(220, 220, 220);
+}
+
+.full-height {
+  height: 100%;
+}
+
+.background-light {
+  background-color: rgb(243, 243, 243);
+}
+
+.image {
+  max-width: 50%;
+  max-height: 300px;
+}
+
+.margin-8 {
+  margin: 8px;
+}
+
+.m-t-12 {
+  margin-top: 12px;
+}
+
+.p-t-8 {
+  padding-top: 8px;
+}
+
+.p-l-8 {
+  padding-left: 8px;
+}
+
+.p-l-24 {
+  padding-left: 24px;
+}
+
+.m-l-24 {
+  margin-left: 24px;
+}
+
+.m-24 {
+  margin: 24px;
+}
+
+.centered {
+  text-align: center;
+}
+
+.achor-btn {
+  text-decoration: none;
+  color: rgb(17, 32, 82);
+}
+
+.action-btn {
+  color: white;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  min-width: 80px;
+  border: 1px solid rgb(47, 79, 187);
+  border-radius: 2px;
+  color: rgb(17, 32, 82);
+  background-color: white;
+}
+
+.achor-btn:hover,
+.action-btn:hover {
+  cursor: pointer;
+  background-color: rgb(36, 53, 140);
+  color: white;
+}

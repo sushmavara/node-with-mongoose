@@ -62,11 +62,17 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 // Relative imports
-const shopRoutes = require("./routes/shop");
+const shopExports = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
+const cartRoutes = require("./routes/cart");
+const errorControler = require("./controllers/error");
 
 // ! Initializing app
 const app = express();
+
+// ! Setting Template Engine
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
 // ! Adding body parser to the middlewre
 // This body parser adds body to request object where the staturure is key value pair - while in node js we need to listen to data and end events on req to get the input
@@ -89,11 +95,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ! Adding routes
 app.use("/admin", adminRoutes);
-app.use(shopRoutes);
+app.use(shopExports);
+app.use(cartRoutes);
 
-app.use("/", (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
-});
+// ! Handling Error page
+app.use("/", errorControler.get404Page);
 
 const server = http.createServer(app);
 server.listen("3000");

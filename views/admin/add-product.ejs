@@ -1,0 +1,51 @@
+<%- include('../layouts/main.ejs') %>
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+   <%- include('../layouts/header.ejs') %>
+    <main class="main-content">
+      <form class="form-wrapper" action="/admin/<%= isEditing ? 'edit-product' : 'add-product' %>" method="POST">
+        <div class="form-body">
+          <div class="field-wrapper">
+            <div class="field-name">Title</div>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              class="input-value"
+              value="<%if(isEditing) {%><%= product.title %><%}%>"
+            />
+          </div>
+          <div class="field-wrapper">
+            <div class="field-name">Image URL</div>
+            <input type="text" name="imageUrl" id="imageUrl" class="input-value"
+                   value="<%if(isEditing) {%><%= product.imageUrl %><%}%>"
+            />
+          </div>
+          <div class="field-wrapper">
+            <div class="field-name">Price</div>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              class="input-value"
+              step="0.01"
+              value="<%if(isEditing) {%><%= Number(product.price)%><%}%>"
+            />
+          </div>
+          <div class="field-wrapper">
+            <div class="field-name">Description</div>
+            <textarea class="input-textarea" rows="5" name="description" id="description"><%if(isEditing) {%><%= product.description %> <%}%>
+            </textarea>
+          </div>
+        </div>
+        <div class="footer">
+          <% if(isEditing) {%>
+            <input type="hidden" name="productId" value="<%= product.id %>" />
+          <% }%>
+          <button type="submit" class="action-btn"><%= isEditing ? "Update Product" : "Add Product" %></button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

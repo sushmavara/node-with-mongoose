@@ -1,0 +1,56 @@
+.product-list-wrapper {
+  display: grid;
+  grid-template-columns: 1fr; /*Keeping 1 frame which is defaults to mobile*/
+  gap: 30px;
+}
+
+/*Then checking for screen width and for big screen overriding the class to have 1fr 1fr 1fr 1fr 4 equal parts*/
+@media (min-width: 1024px) {
+  .product-list-wrapper {
+    grid-template-columns: repeat(4, 1fr); /* 3 equal columns */
+  }
+}
+
+.product-card {
+  height: 380px;
+  width: 280px;
+  border: 1px solid rgb(164, 115, 210);
+  border-radius: 4px;
+  z-index: 50;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow here */
+}
+
+.product-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px;
+}
+
+.product-image {
+  height: 160px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.product-desc {
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-footer {
+  justify-content: center;
+}

@@ -1,45 +1,45 @@
-body {
-  font-family: "Times New Roman", Times, serif;
-  margin: 0;
+.header {
+  z-index: 100;
+  position: sticky;
+  top: 0;
+  height: 60px;
   padding: 0;
-}
-
-.main-header {
-  height: 4rem;
+  margin: 0;
+  background-color: rgb(32, 76, 94);
   width: 100%;
-  background-color: rgb(167, 216, 247);
-  border-bottom: gray solid 1px;
 }
 
-.navbar {
+.header-nav {
+  margin: 0;
   height: 100%;
-  display: flex;
-  align-items: center;
 }
 
 .nav-list {
   margin: 0;
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
 .nav-list-item {
-  padding: 12px;
+  font-size: 16px;
   list-style-type: none;
+  padding: 16px;
+  cursor: pointer;
 }
 
 .nav-list-item a {
   text-decoration: none;
   cursor: pointer;
+  color: white;
 }
 
-.nav-list-item a:hover,
-.nav-list-item a:active {
-  color: black;
+.nav-list-item a.active {
+  color: rgb(239, 236, 54);
 }
 
-.page-not-found {
-  margin: 0 auto;
-  width: 150px;
-  padding-top: 24px;
+.main-content {
+  padding: 24px;
+  height: calc(100% - 108px);
+  overflow: auto;
 }
