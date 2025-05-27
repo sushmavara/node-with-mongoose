@@ -56,7 +56,7 @@ class Cart {
         productDetails.qty * newPrice;
 
       fs.writeFile(cartStorePath, JSON.stringify(cart), (err) => {
-        console.log(err);
+        // console.log(err);
       });
     });
   }
@@ -75,7 +75,6 @@ class Cart {
         totalPrice: updatedPrice,
       };
       fs.writeFile(cartStorePath, JSON.stringify(updatedCart), (err) => {
-        console.log("Cart error", err);
         // err handling
         cb();
       });

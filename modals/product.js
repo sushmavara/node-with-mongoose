@@ -60,7 +60,6 @@ class Product {
         productStoreFilePath,
         JSON.stringify(updatedProducts),
         (err) => {
-          console.log("Product error", err);
           cb();
         }
       );

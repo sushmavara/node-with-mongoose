@@ -61,9 +61,7 @@ const deleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   Product.getProductById(productId, (productDetails) => {
     Cart.deleteProductFromCart(productId, productDetails.price, () => {
-      console.log("Hello 1");
       Product.deleteProduct(productId, () => {
-        console.log("Hello 2");
         res.redirect("/admin/products");
       });
     });
