@@ -9,25 +9,34 @@ const getShopIndexPage = (req, res, next) => {
 
 const getProductDetailsPage = (req, res, next) => {
   const productId = req.params.productId;
-
-  Product.getProductById(productId, (product) => {
-    res.render("./shop/product-details.ejs", {
-      product,
-      pageTitle: "Product Details",
-      activeTab: "shop-products",
+  Product.getProductById(productId)
+    .then((product) => {
+      res.render("./shop/product-details.ejs", {
+        product: product,
+        pageTitle: `Product Details: ${product.title}`,
+        activeTab: "shop-products",
+      });
+    })
+    .catch((err) => {
+      console.log("Error fetching product details:", err);
+      res.status(500).send("Internal Server Error");
     });
-  });
 };
 
 const getAllProducts = (req, res, next) => {
-  Product.getAllProducts((products) => {
-    res.render("./shop/products.ejs", {
-      pageTitle: "Products",
-      activeTab: "shop-products",
-      products,
-      isAdmin: false,
+  Product.getAllProducts()
+    .then(([products]) => {
+      res.render("./shop/products.ejs", {
+        pageTitle: "Products",
+        activeTab: "shop-products",
+        products,
+        isAdmin: false,
+      });
+    })
+    .catch((err) => {
+      console.log("Error fetching products:", err);
+      res.status(500).send("Internal Server Error");
     });
-  });
 };
 
 module.exports = {
