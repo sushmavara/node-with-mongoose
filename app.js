@@ -54,7 +54,6 @@
 // ! ******************************* Express JS *******************************************
 
 //  Core modules
-const http = require("http");
 const path = require("path");
 
 // External libraries
@@ -66,6 +65,12 @@ const shopExports = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
 const cartRoutes = require("./routes/cart");
 const errorControler = require("./controllers/error");
+const sequelize = require("./utils/database");
+const Product = require("./modals/product");
+const Cart = require("./modals/cart");
+const User = require("./modals/user");
+const CartItem = require("./modals/cart-item");
+const { cartId } = require("./constants/cart");
 
 // ! Initializing app
 const app = express();
@@ -93,6 +98,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // These are called middleware functions which transforms the request response
 
+// Middleware is executed for incoming request not for server starting
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
+
 // ! Adding routes
 app.use("/admin", adminRoutes);
 app.use(shopExports);
@@ -101,8 +116,36 @@ app.use(cartRoutes);
 // ! Handling Error page
 app.use("/", errorControler.get404Page);
 
-const server = http.createServer(app);
-server.listen("3000");
+// Definding relation between modals
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
 
-// We can do this using app.listen which in tern execute both line for creating server and listening to the port
-// app.listen("3000");
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    return User.findOrCreate({
+      where: {
+        id: 1,
+        name: "SUSH",
+        age: 30,
+      },
+    });
+  })
+  .then(([user]) => {
+    return user.getCart().then((cart) => {
+      if (!cart) return user.createCart({ id: cartId });
+    });
+  })
+  .then(() => {
+    app.listen("3000");
+    console.log("Connection has been established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database:", error);
+  });

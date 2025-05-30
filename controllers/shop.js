@@ -9,7 +9,7 @@ const getShopIndexPage = (req, res, next) => {
 
 const getProductDetailsPage = (req, res, next) => {
   const productId = req.params.productId;
-  Product.getProductById(productId)
+  Product.findByPk(productId)
     .then((product) => {
       res.render("./shop/product-details.ejs", {
         product: product,
@@ -24,8 +24,8 @@ const getProductDetailsPage = (req, res, next) => {
 };
 
 const getAllProducts = (req, res, next) => {
-  Product.getAllProducts()
-    .then(([products]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("./shop/products.ejs", {
         pageTitle: "Products",
         activeTab: "shop-products",
