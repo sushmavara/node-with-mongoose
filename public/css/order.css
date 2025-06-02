@@ -1,0 +1,55 @@
+.orderListContainer {
+  display: grid;
+  gap: 30px;
+  grid-template-rows: 1fr;
+}
+
+.orderContainer {
+  width: 100%;
+  background-color: white;
+  border: 1px solid rgb(164, 115, 210);
+  border-radius: 4px;
+  z-index: 50;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow here */
+}
+
+.orderHeader {
+  height: 60px;
+  background-color: rgb(225, 219, 219);
+  color: rgb(49, 48, 48);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.headerElement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orderBodyContainer {
+  padding: 20px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 4fr 1.5fr;
+}
+
+.orderBody {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 3fr;
+}
+
+.orderTitle {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.product-image {
+  height: 110px;
+  width: 76%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

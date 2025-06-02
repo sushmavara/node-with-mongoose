@@ -60,16 +60,25 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-// Relative imports
+// Routes imports
 const shopExports = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
 const cartRoutes = require("./routes/cart");
+const orderRoutes = require("./routes/order");
 const errorControler = require("./controllers/error");
+
+// Sequelize Import
 const sequelize = require("./utils/database");
+
+// Modals Import
 const Product = require("./modals/product");
 const Cart = require("./modals/cart");
 const User = require("./modals/user");
 const CartItem = require("./modals/cart-item");
+const Order = require("./modals/order");
+const OrderItem = require("./modals/order-item");
+
+// Constants
 const { cartId } = require("./constants/cart");
 
 // ! Initializing app
@@ -112,6 +121,7 @@ app.use((req, res, next) => {
 app.use("/admin", adminRoutes);
 app.use(shopExports);
 app.use(cartRoutes);
+app.use(orderRoutes);
 
 // ! Handling Error page
 app.use("/", errorControler.get404Page);
@@ -126,6 +136,17 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 
+Order.hasMany(OrderItem);
+OrderItem.belongsTo(Order, { constraints: true, onDelete: "CASCADE" });
+
+Order.belongsTo(User);
+User.hasMany(Order);
+
+// This makes sure on deletion of product orderItem is unaffected
+OrderItem.belongsTo(Product, {
+  constraints: false, // allows product deletion without blocking
+});
+
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -138,9 +159,11 @@ sequelize
     });
   })
   .then(([user]) => {
-    return user.getCart().then((cart) => {
-      if (!cart) return user.createCart({ id: cartId });
-    });
+    return Promise.all([user.getCart(), Promise.resolve(user)]);
+  })
+  .then(([cart, user]) => {
+    if (!cart) return user.createCart({ id: cartId });
+    return cart;
   })
   .then(() => {
     app.listen("3000");

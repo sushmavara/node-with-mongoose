@@ -1,0 +1,52 @@
+<%- include('../layouts/main.ejs') %>
+    <link rel="stylesheet" href="/css/order.css" />
+  </head>
+  <body>
+   <%- include('../layouts/header.ejs') %>
+    <main class="main-content background-light">
+      <div>
+        <% if(orders.length > 0) {%>
+          <div class="orderListContainer">
+            <h4>Order List</h4>
+              <% for(order of orders) { %>
+                <div class="orderContainer">
+                  <div class="orderHeader">
+                    <div class="headerElement">
+                      <div>Order Placed: <%= new Date(order.createdAt).toDateString() %></div>
+                    </div>
+                    <div class="headerElement">
+                      <div>Order Number: # <%= order.number %></div>
+                    </div>
+                  </div>
+                  <div class="orderBodyContainer">
+                    <div class="orderBody">
+                      <% for (orderItem of order.orderItems) {%>
+                        <img class="product-image" src="<%= orderItem.product ? orderItem.product.imageUrl : orderItem.title %>" alt="<%= orderItem.product ? orderItem.product.title : orderItem.title %>"/>
+                        <div>
+                          <h4 class="orderTitle">
+                            <%= orderItem.product ? orderItem.product.title : orderItem.title %>
+                          </h4>
+                          <div>
+                            <%= orderItem.product ? orderItem.product.description : ' - ' %>
+                          </div>
+                          <div>
+                            Qty: <%= orderItem.qty %>
+                          </div>
+                          <div>
+                            Price: <%= orderItem.price %>
+                          </div>
+                        </div>
+                      <%}%>
+                    </div>
+                    <h4>Order Total: <%= orderIdVsTotal[order.id] %></h4>
+                  </div>
+                </div>
+              <% } %>
+          </div>
+        <%} else{ %>
+          <h4>No Orders Placed</h4>
+        <% } %>
+      </div>
+    </main>
+  </body>
+</html>

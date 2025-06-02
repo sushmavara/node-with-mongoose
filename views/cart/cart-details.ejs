@@ -58,7 +58,9 @@
               <h3 class="p-l-8"> $ <%= totalPrice %></h3>
             </div>
             <div class="display-center">
-              <button class="action-btn">Proceed to Buy</button>
+              <form action="/create-order" method="POST">
+                <button class="action-btn">Checkout</button>
+              </form>
             </div>
           </div>
         </div>
