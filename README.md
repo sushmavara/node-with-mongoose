@@ -9,3 +9,5 @@
 # utils/database will take care of configuring "sequelize" with "shop" database
 
 # do npm install and run npm start to start the server open localhost: http://localhost:3000/
+
+# for creating the tables for the first time run app.sync({force: true}) in app.js - once its successful then override force to false - This will make sure the tables are created in the shop db 
