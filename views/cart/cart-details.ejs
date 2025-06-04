@@ -22,19 +22,19 @@
                       </div>
                       <div class="display-flex m-t-12">
                         <div class="cart-action-button-wrapper">
-                          <form method="POST" action="/delete-item-from-cart?qty=1">
-                            <input type="hidden" name="productId" value="<%=product.id%>"/>
+                          <form method="POST" action="/delete-item-by-qty?qty=1">
+                            <input type="hidden" name="productId" value="<%=product._id%>"/>
                             <button type="submit" class="cart-qty-action-button">-</button>
                           </form>
-                          <div class="cart-qty"> <%= product.cartItem.qty %> </div>
+                          <div class="cart-qty"> <%= product.qty %> </div>
                           <form method="POST" action="/add-to-cart?redirectTo=cart">
-                            <input type="hidden" name="productId" value="<%=product.id%>"/>
+                            <input type="hidden" name="productId" value="<%=product._id%>"/>
                             <button type="submit" class="cart-qty-action-button">+</button>
                           </form>
                         </div>
                         <div class="p-l-8">
                           <form method="POST" action="/delete-item-from-cart">
-                            <input type="hidden" name="productId" value="<%=product.id%>"/>
+                            <input type="hidden" name="productId" value="<%=product._id%>"/>
                             <button type="submit" class="action-btn display-center">Delete</button>
                           </form>
                         </div>

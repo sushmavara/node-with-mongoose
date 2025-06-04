@@ -20,14 +20,14 @@
                   </div>
                   <div class="orderBodyContainer">
                     <div class="orderBody">
-                      <% for (orderItem of order.orderItems) {%>
-                        <img class="product-image" src="<%= orderItem.product ? orderItem.product.imageUrl : orderItem.title %>" alt="<%= orderItem.product ? orderItem.product.title : orderItem.title %>"/>
+                      <% for (orderItem of order.items) {%>
+                        <img class="product-image" src="<%= orderItem.imageUrl %>" alt="<%= orderItem.title %>"/>
                         <div>
                           <h4 class="orderTitle">
-                            <%= orderItem.product ? orderItem.product.title : orderItem.title %>
+                            <%= orderItem.title %>
                           </h4>
                           <div>
-                            <%= orderItem.product ? orderItem.product.description : ' - ' %>
+                            <%= orderItem.description %>
                           </div>
                           <div>
                             Qty: <%= orderItem.qty %>

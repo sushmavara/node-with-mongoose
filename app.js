@@ -67,19 +67,11 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const errorControler = require("./controllers/error");
 
-// Sequelize Import
-const sequelize = require("./utils/database");
+// MongoClient Import
+const { mongoClient, getDb } = require("./utils/database");
 
-// Modals Import
-const Product = require("./modals/product");
-const Cart = require("./modals/cart");
+// User Model Import
 const User = require("./modals/user");
-const CartItem = require("./modals/cart-item");
-const Order = require("./modals/order");
-const OrderItem = require("./modals/order-item");
-
-// Constants
-const { cartId } = require("./constants/cart");
 
 // ! Initializing app
 const app = express();
@@ -109,9 +101,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware is executed for incoming request not for server starting
 app.use((req, res, next) => {
-  User.findByPk(1)
+  User.findById(currentUser._id)
     .then((user) => {
-      req.user = user;
+      // This will help with all the class methods
+      req.user = new User(
+        user.name,
+        user.email,
+        user.phone,
+        user.cart,
+        user._id
+      );
       next();
     })
     .catch((err) => console.log(err));
@@ -125,50 +124,29 @@ app.use(orderRoutes);
 
 // ! Handling Error page
 app.use("/", errorControler.get404Page);
+let currentUser = null;
 
-// Definding relation between modals
-Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-User.hasMany(Product);
-
-User.hasOne(Cart);
-Cart.belongsTo(User);
-
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
-
-Order.hasMany(OrderItem);
-OrderItem.belongsTo(Order, { constraints: true, onDelete: "CASCADE" });
-
-Order.belongsTo(User);
-User.hasMany(Order);
-
-// This makes sure on deletion of product orderItem is unaffected
-OrderItem.belongsTo(Product, {
-  constraints: false, // allows product deletion without blocking
-});
-
-sequelize
-  .sync({ force: false })
+mongoClient()
   .then(() => {
-    return User.findOrCreate({
-      where: {
-        id: 1,
-        name: "SUSH",
-        age: 30,
-      },
-    });
+    console.log("Connected to MongoDB successfully");
+    const db = getDb(); // this will use the shop database specified in the connection string
+    return db.collection("users").findOne();
   })
-  .then(([user]) => {
-    return Promise.all([user.getCart(), Promise.resolve(user)]);
+  .then((user) => {
+    const db = getDb();
+    if (!user) {
+      const user = new User("Admin", "admin@gmail.com", "8623099874");
+      return user.save().then((result) => {
+        return db.collection("users").findOne({ _id: result.insertedId });
+      });
+    } else {
+      return user;
+    }
   })
-  .then(([cart, user]) => {
-    if (!cart) return user.createCart({ id: cartId });
-    return cart;
-  })
-  .then(() => {
+  .then((user) => {
+    currentUser = user;
     app.listen("3000");
-    console.log("Connection has been established successfully.");
   })
-  .catch((error) => {
-    console.error("Unable to connect to the database:", error);
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB:", err);
   });

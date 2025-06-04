@@ -41,7 +41,7 @@
         </div>
         <div class="footer">
           <% if(isEditing) {%>
-            <input type="hidden" name="productId" value="<%= product.id %>" />
+            <input type="hidden" name="productId" value="<%= product._id %>" />
           <% }%>
           <button type="submit" class="action-btn"><%= isEditing ? "Update Product" : "Add Product" %></button>
         </div>

@@ -15,12 +15,12 @@ const getEditProductPage = (req, res, next) => {
     return;
   }
 
-  Product.findByPk(productId)
+  Product.getProductById(productId)
     .then((product) => {
       res.render("./admin/add-product.ejs", {
         pageTitle: "Edit Product",
         activeTab: "add-product",
-        product: product,
+        product,
         isEditing,
       });
     })
@@ -33,13 +33,15 @@ const getEditProductPage = (req, res, next) => {
 const postAddProduct = (req, res, next) => {
   // with body parser library we get req.body which has the input
   const { title, description, imageUrl, price } = req.body || {};
-  req.user
-    .createProduct({
-      title,
-      description,
-      imageUrl,
-      price: Number(price),
-    })
+  const product = new Product(
+    title,
+    description,
+    imageUrl,
+    price,
+    req.user._id
+  );
+  product
+    .create()
     .then(() => {
       res.redirect("/admin/products");
     })
@@ -47,22 +49,19 @@ const postAddProduct = (req, res, next) => {
 };
 
 const postUpdateProduct = (req, res, next) => {
-  const { productId, ...rest } = req.body || {};
-  Product.findByPk(productId)
-    .then((product) => {
-      product
-        .update({
-          title: rest.title,
-          description: rest.description,
-          imageUrl: rest.imageUrl,
-          price: rest.price,
-        })
-        .then(() => {
-          res.redirect("/admin/products");
-        })
-        .catch((err) => {
-          console.log("Error updating product:", err);
-        });
+  const { productId, title, description, imageUrl, price } = req.body || {};
+  const product = new Product(
+    title,
+    description,
+    imageUrl,
+    price,
+    req.user._id,
+    productId
+  );
+  product
+    .update()
+    .then(() => {
+      res.redirect("/admin/products");
     })
     .catch((err) => {
       console.log("Error updating product:", err);
@@ -71,7 +70,11 @@ const postUpdateProduct = (req, res, next) => {
 
 const deleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.destroy({ where: { id: productId } })
+
+  Product.deleteProduct(productId)
+    .then(() => {
+      return req.user.deleteItemFromCart(productId);
+    })
     .then(() => {
       res.redirect("/admin/products");
     })
@@ -81,7 +84,7 @@ const deleteProduct = (req, res, next) => {
 };
 
 const getAllProducts = (req, res, next) => {
-  Product.findAll()
+  Product.getAllProducts()
     .then((products) => {
       res.render("./admin/products.ejs", {
         pageTitle: "Admin Products",

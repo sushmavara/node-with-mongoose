@@ -1,7 +1,7 @@
 {
-  "name": "node-js",
+  "name": "mongodb-with-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "# This gives overview of using node js with Sequelize with dialect mysql",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,9 +24,7 @@
     "body-parser": "^2.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "mysql2": "^3.14.1",
-    "save": "^2.9.0",
-    "sequelize": "^6.37.7",
+    "mongodb": "^6.16.0",
     "uuid": "^11.1.0"
   }
 }
