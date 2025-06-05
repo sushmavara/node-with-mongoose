@@ -1,57 +1,4 @@
-// node-js
-
-// ! Node JS is a javascript run time enverionment
-// ! This executes javascript in server instead of web browser
-
-// ? To run JS on browser - the JS is compiled into machine code using V8 engine - which is developed by google
-// ? And the same engine is used by Node JS to run the javascript on server or any machine
-// ! V8 engine is wrtitten in c++
-// ? Along with JS feature - it also add some additional features like handling file systems on the server or handling databases etc
-
-// ? Along with Adding Server side code node js is capable of doing alot of thins
-
-// 1. Server side coding
-// 2. Creating Servers
-// 3. Handling Requests to server
-// 4. Bussiness Logic
-// 5. Sending Responses to client - maybe a html page or file or json data etc
-// 6. File or database handling and much more
-
-// Node js is a single thread runtime program which uses concept of event loop to handle async code similar to js
-// The callbacks are added to even queue and when event triggers the corresponding callback is executed
-// ? Along with event queue it also has worker process to handle heavy lifting code like large file transfer complex business logic etc
-
-// ! There are some core modules which node js uses
-// ? http - This is used for creating server and handling request
-// ? https - this is to create Server SSL server for handling encrypted data
-// ? fs - for handling file
-// ? require - for importing modules
-// ? path  - handling file path as its different in each os like mac or windows etc
-//  ? os - for os related queries
-// ? console - for consoling messages to terminal
-
-// Lets try to create first server
-
-// we can use http to create server - via createServer function which takes a callback function having request and response param. And this returns the server instance created -
-// We need to start the server by calling listen - and make it listen to port given as param
-
-// ! This is the native way of writing node js
-// ! where we can use core module http to create server and use listen to listen to a port and create our own request response handler - doing everything manually from setting headers to deducing buffer input etc with alot of event listeners
-
-// ? const http = require("http");
-// ? const handlers = require("./venillaNodeJs/handlers");
-
-// ? const server = http.createServer(handlers.requestHandler);
-
-// makes the server listens to the port
-// ? server.listen("3000");
-// process.exit(); // This will kill the server
-
-// ! --------------------------- Vanilla node js end ----------------------------------
-
-// ! To mitigate above manual work We have a framework called EXPRESS JS which provides us alot of utility functions for handling request
-
-// ! ******************************* Express JS *******************************************
+// ? Note: The above code is a basic setup for an Express application with MongoDB integration using Mongoose.
 
 //  Core modules
 const path = require("path");
@@ -60,15 +7,15 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+// Mongo DB Object Document Mapper
+const mongoose = require("mongoose");
+
 // Routes imports
 const shopExports = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
 const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const errorControler = require("./controllers/error");
-
-// MongoClient Import
-const { mongoClient, getDb } = require("./utils/database");
 
 // User Model Import
 const User = require("./modals/user");
@@ -104,13 +51,7 @@ app.use((req, res, next) => {
   User.findById(currentUser._id)
     .then((user) => {
       // This will help with all the class methods
-      req.user = new User(
-        user.name,
-        user.email,
-        user.phone,
-        user.cart,
-        user._id
-      );
+      req.user = user; // user will be the mongoose object hence it can be assigned directly without any modification
       next();
     })
     .catch((err) => console.log(err));
@@ -126,19 +67,24 @@ app.use(orderRoutes);
 app.use("/", errorControler.get404Page);
 let currentUser = null;
 
-mongoClient()
+mongoose
+  .connect(
+    "mongodb+srv://sush_mongo:rlRxRyzJFe4BmWfr@cluster0.m6exljw.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0"
+  )
   .then(() => {
-    console.log("Connected to MongoDB successfully");
-    const db = getDb(); // this will use the shop database specified in the connection string
-    return db.collection("users").findOne();
+    return User.findOne();
   })
   .then((user) => {
-    const db = getDb();
     if (!user) {
-      const user = new User("Admin", "admin@gmail.com", "8623099874");
-      return user.save().then((result) => {
-        return db.collection("users").findOne({ _id: result.insertedId });
+      // create mongoose model instance for user
+      // and call save method to save it in the database
+      const user = new User({
+        name: "Admin",
+        email: "admin@email.com",
+        phone: "1234567890",
+        cart: { items: [] },
       });
+      return user.save();
     } else {
       return user;
     }

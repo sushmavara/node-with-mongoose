@@ -21,13 +21,14 @@ const hanldeAddToCart = (req, res, next) => {
 
 const getCartPage = (req, res, next) => {
   req.user
-    .getCart()
-    .then(({ items: products }) => {
+    .populate("cart.items.productId") // Mongoose method to populate the cart items with product details
+    .then((user) => {
+      const products = user.cart.items;
       const { totalQty, totalPrice } = products.reduce(
-        (acc, product) => {
+        (acc, cp) => {
           return {
-            totalPrice: acc.totalPrice + product.price * product.qty,
-            totalQty: acc.totalQty + product.qty,
+            totalPrice: acc.totalPrice + cp.productId.price * cp.qty,
+            totalQty: acc.totalQty + cp.qty,
           };
         },
         {

@@ -9,7 +9,7 @@ const getShopIndexPage = (req, res, next) => {
 
 const getProductDetailsPage = (req, res, next) => {
   const productId = req.params.productId;
-  Product.getProductById(productId)
+  Product.findById(productId) // mongoose method to find a product by its ID
     .then((product) => {
       res.render("./shop/product-details.ejs", {
         product,
@@ -24,7 +24,7 @@ const getProductDetailsPage = (req, res, next) => {
 };
 
 const getAllProducts = (req, res, next) => {
-  Product.getAllProducts()
+  Product.find() // mongoose method to find all products
     .then((products) => {
       res.render("./shop/products.ejs", {
         pageTitle: "Products",

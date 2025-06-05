@@ -1,35 +1,40 @@
 const Order = require("../modals/order");
 
 const getOrdersPage = (req, res, next) => {
-  Order.getAllOrders(req.user._id).then((orders) => {
-    const orderIdVsTotal = orders.reduce((acc, order) => {
-      const totalPrice = order.items.reduce((acc, item) => {
-        return acc + item.qty * item.price;
-      }, 0);
-      return {
-        ...acc,
-        [order.id]: totalPrice,
-      };
-    }, {});
-    res.render("./order/orders.ejs", {
-      pageTitle: "Orders",
-      activeTab: "orders",
-      orders: orders.reverse(),
-      orderIdVsTotal,
+  Order.find({
+    "user.userId": req.user._id,
+  })
+    // .populate("items.productId") // Not need here as we have sufficient data in the order
+    .then((orders) => {
+      res.render("./order/orders.ejs", {
+        pageTitle: "Orders",
+        activeTab: "orders",
+        orders: orders.reverse(), // Reverse to show latest orders first
+      });
     });
-  });
 };
 
 const createOrder = (req, res, next) => {
-  req.user.getCart().then(({ items }) => {
-    const updatedItems = items.map((item) => ({
-      title: item.title,
-      description: item.description,
-      price: item.price,
+  req.user.populate("cart.items.productId").then((user) => {
+    const updatedItems = user.cart.items.map((item) => ({
+      title: item.productId.title,
+      description: item.productId.description,
+      price: item.productId.price,
       qty: item.qty,
-      imageUrl: item.imageUrl,
+      imageUrl: item.productId.imageUrl,
+      productId: item.productId,
     }));
-    const order = new Order(updatedItems, req.user._id);
+    const totalPrice = updatedItems.reduce((acc, item) => {
+      return acc + item.price * item.qty;
+    }, 0);
+    const order = new Order({
+      items: updatedItems,
+      user: {
+        userId: req.user._id,
+        name: req.user.name,
+      },
+      totalPrice,
+    });
     order
       .save()
       .then(() => {

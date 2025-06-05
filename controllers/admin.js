@@ -15,7 +15,7 @@ const getEditProductPage = (req, res, next) => {
     return;
   }
 
-  Product.getProductById(productId)
+  Product.findById(productId) // findById is a mongoose method
     .then((product) => {
       res.render("./admin/add-product.ejs", {
         pageTitle: "Edit Product",
@@ -33,15 +33,15 @@ const getEditProductPage = (req, res, next) => {
 const postAddProduct = (req, res, next) => {
   // with body parser library we get req.body which has the input
   const { title, description, imageUrl, price } = req.body || {};
-  const product = new Product(
+  const product = new Product({
     title,
     description,
     imageUrl,
     price,
-    req.user._id
-  );
+    userId: req.user._id,
+  }); // create a new instance of Product model in mongoose structure
   product
-    .create()
+    .save() // Save is a mongoose method given over model
     .then(() => {
       res.redirect("/admin/products");
     })
@@ -50,16 +50,17 @@ const postAddProduct = (req, res, next) => {
 
 const postUpdateProduct = (req, res, next) => {
   const { productId, title, description, imageUrl, price } = req.body || {};
-  const product = new Product(
-    title,
-    description,
-    imageUrl,
-    price,
-    req.user._id,
-    productId
-  );
-  product
-    .update()
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        return res.status(404).send("Product not found");
+      }
+      product.title = title;
+      product.description = description;
+      product.imageUrl = imageUrl;
+      product.price = price;
+      return product.save();
+    })
     .then(() => {
       res.redirect("/admin/products");
     })
@@ -71,7 +72,7 @@ const postUpdateProduct = (req, res, next) => {
 const deleteProduct = (req, res, next) => {
   const productId = req.body.productId;
 
-  Product.deleteProduct(productId)
+  Product.findByIdAndDelete(productId)
     .then(() => {
       return req.user.deleteItemFromCart(productId);
     })
@@ -84,7 +85,7 @@ const deleteProduct = (req, res, next) => {
 };
 
 const getAllProducts = (req, res, next) => {
-  Product.getAllProducts()
+  Product.find() // find is a mongoose method that retrieves all products
     .then((products) => {
       res.render("./admin/products.ejs", {
         pageTitle: "Admin Products",

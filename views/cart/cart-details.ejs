@@ -10,37 +10,37 @@
             <h2 class="section-header">Shopping Cart</h2>
             <hr class="hr-line">
             <div class="full-width">
-              <% for(product of products){ %>
+              <% for(cartProduct of products){ %>
                 <div class="cart-item-row">
-                    <div><%= product.title %></div>
+                    <div><%= cartProduct.productId.title %></div>
                     <div>
                       <div class="display-inline-flex">
-                        <img src="<%= product.imageUrl %>" alt="<%=product.description %>" class="image"/>
+                        <img src="<%= cartProduct.productId.imageUrl %>" alt="<%=cartProduct.productId.description %>" class="image"/>
                         <div class="p-t-8">
-                          <%= product.description %>
+                          <%= cartProduct.productId.description %>
                         </div> 
                       </div>
                       <div class="display-flex m-t-12">
                         <div class="cart-action-button-wrapper">
                           <form method="POST" action="/delete-item-by-qty?qty=1">
-                            <input type="hidden" name="productId" value="<%=product._id%>"/>
+                            <input type="hidden" name="productId" value="<%=cartProduct.productId._id%>"/>
                             <button type="submit" class="cart-qty-action-button">-</button>
                           </form>
-                          <div class="cart-qty"> <%= product.qty %> </div>
+                          <div class="cart-qty"> <%= cartProduct.qty %> </div>
                           <form method="POST" action="/add-to-cart?redirectTo=cart">
-                            <input type="hidden" name="productId" value="<%=product._id%>"/>
+                            <input type="hidden" name="productId" value="<%=cartProduct.productId._id%>"/>
                             <button type="submit" class="cart-qty-action-button">+</button>
                           </form>
                         </div>
                         <div class="p-l-8">
                           <form method="POST" action="/delete-item-from-cart">
-                            <input type="hidden" name="productId" value="<%=product._id%>"/>
+                            <input type="hidden" name="productId" value="<%=cartProduct.productId._id%>"/>
                             <button type="submit" class="action-btn display-center">Delete</button>
                           </form>
                         </div>
                       </div>
                     </div>
-                    <div class="price-column">$ <%= product.price %></div>
+                    <div class="price-column">$ <%= cartProduct.productId.price %></div>
                 </div>
                 <hr class="hr-line"/>
               <% } %>

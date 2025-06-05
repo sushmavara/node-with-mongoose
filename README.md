@@ -1,6 +1,8 @@
 # node-js
 
-# This gives overview of using node js with mongo db
+# This gives overview of using node js with mongoose
+
+# mongoose helps in dealing with mongo db queries which we can shift our focus on business logic
 
 # install mongo db altas and mongodb compass and have them connected
 
